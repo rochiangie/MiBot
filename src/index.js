@@ -2,10 +2,6 @@
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
-client.on('qr', (qr) => {
-  console.log('🔐 Escaneá este QR:');
-  qrcode.generate(qr, { small: false });
-});
 const path = require('path');
 const fs = require('fs');
 
@@ -113,27 +109,18 @@ const groupState = {};  // { [groupId]: { ultimosPedidos: [] } }
 // ===================================
 
 const client = new Client({
-  authStrategy: new LocalAuth({
-    clientId: 'default',
-    dataPath: DATA_PATH,
-  }),
+  authStrategy: new LocalAuth({ dataPath: DATA_PATH }),
   puppeteer: {
-    headless: true, // o 'new' si tu versión de puppeteer lo requiere
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: [
       '--no-sandbox',
+      '--disable-setuid-sandbox',
       '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-extensions'
     ],
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-    timeout: 120000,
-  },
-
-  // Evita quedarse en 99% bajando la webapp en cada arranque
-  webVersionCache: { type: 'local' },
-
-  takeoverOnConflict: true,
-  takeoverTimeoutMs: 30000,
-  restartOnAuthFail: true,
-  qrMaxRetries: 5,
+    headless: true
+  }
 });
 
 // ===================================
@@ -163,8 +150,8 @@ client.on('auth_failure', msg => {
 });
 
 client.on('ready', () => {
-  console.log('✅ Bot de Angie Rochi conectado y listo! 💃🔥');
-  console.log(`Número: ${client.info.wid.user}`);
+  console.log('🤖 Bot de Angie Rochi conectado y listo! 💃🔥');
+  console.log(`Número: ${client.info?.wid?.user}`);
 });
 
 client.on('disconnected', (reason) => {
@@ -180,16 +167,21 @@ client.on('connection_gained', () => {
 });
 
 client.on('connection_lost', () => {
-  console.log('🟠 Conexión perdida (intentando reconectar)');
+  console.log('🟠 Conexión perdida (intentando reconectar)`);
 });
 
 client.on('error', (error) => {
   console.error('❌ Error del cliente:', error);
 });
 
-client.pupBrowser?.on?.('disconnected', () => {
-  console.log('🧊 Chromium se cerró / murió');
-});
+// ⚠️ Este evento puede dar error si pupBrowser no existe.
+// Podés dejarlo comentado si no lo necesitás.
+if (client.pupBrowser?.on) {
+  client.pupBrowser.on('disconnected', () => {
+    console.log('🧊 Chromium se cerró / murió');
+  });
+}
+
 
 // ===================================
 //          HANDLER PRINCIPAL
