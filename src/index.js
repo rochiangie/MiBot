@@ -167,7 +167,7 @@ client.on('connection_gained', () => {
 });
 
 client.on('connection_lost', () => {
-  console.log('🟠 Conexión perdida (intentando reconectar)`);
+    console.log(`🟠 Conexión perdida (intentando reconectar)`);
 });
 
 client.on('error', (error) => {
