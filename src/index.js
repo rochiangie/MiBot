@@ -128,15 +128,20 @@ const client = new Client({
 // ===================================
 
 client.on('qr', qr => {
-  console.log('🔐 Escaneá este QR (solo la primera vez):');
-  qrcode.generate(qr, { small: true });
+  // Mostrar el QR como ASCII (terminal)
+  qrcode.toString(qr, { type: 'terminal' }, (err, url) => {
+    if (err) return console.error(err);
+    console.log(url);
+  });
+
+  // 🔗 Además, generar un link para verlo en el navegador
+  console.log(`👉 Abrí este link en tu navegador para escanear el QR:`);
+  console.log(`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qr)}`);
 });
 
 client.on('loading_screen', (percent, message) => {
-  console.log(`🔄 Cargando: ${percent}% - ${message}`);
-  if (percent === 100) console.log('🎯 Carga completada, conectando...');
+  console.log(`⏳ Cargando: ${percent}% - ${message}`);
 });
-
 client.on('change_state', (state) => {
   console.log('📡 Estado de WA:', state);
 });
