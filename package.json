@@ -1,24 +1,16 @@
 {
-  "name": "verobot",
+  "name": "verobot-whatsapp-bot",
   "version": "1.0.0",
-  "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rochiangie/VeroBot.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/rochiangie/VeroBot/issues"
-  },
-  "homepage": "https://github.com/rochiangie/VeroBot#readme",
   "dependencies": {
     "qrcode-terminal": "^0.12.0",
-    "whatsapp-web.js": "^1.32.0"
+    "whatsapp-web.js": "^1.25.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }
