@@ -1,0 +1,13 @@
+services:
+  whatsapp-bot:
+    image: verobot-whatsapp-bot
+    container_name: whatsapp-bot
+    restart: unless-stopped
+    shm_size: 1gb              # 🔑 clave para Chromium
+    environment:
+      - PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+      # (si tu imagen usa chromium-browser, cambiá a /usr/bin/chromium-browser)
+    volumes:
+      - ./bot/.wwebjs_auth:/app/.wwebjs_auth   # 🔐 sesión persistente
+      - ./:/app                                # si desarrollás en vivo (opcional)
+    # ports: si necesitas debug web, se agregan acá
