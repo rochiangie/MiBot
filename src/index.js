@@ -2,6 +2,10 @@
 
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+client.on('qr', (qr) => {
+  console.log('🔐 Escaneá este QR:');
+  qrcode.generate(qr, { small: false });
+});
 const path = require('path');
 const fs = require('fs');
 
